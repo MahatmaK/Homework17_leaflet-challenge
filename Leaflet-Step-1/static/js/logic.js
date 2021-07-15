@@ -1,6 +1,6 @@
   // Define map
   var myMap = L.map("map", {
-      center: [34.0522, -118.2437],
+      center: [34.0522, -118.2437], // centered on Los Angelos
       zoom: 4
     });
 
@@ -17,32 +17,19 @@
 
 var geojson;
 
+// Call data
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
 
+  // Define json features
   var earthquakes = data.features;
+
+  // Calculate number of earthquakes in dataset
   var numEarthquake = earthquakes.length;
-  
-  
 
-  // geojson = L.choropleth(data, {
-
-  //   valueProperty: geometry.coordinates[2],
-  //   scale: ["rgb(163, 246, 0)", "rgb(163, 246, 0)"],
-  //   steps: 6,
-  //   mode: "q",
-  //   style: {
-  //     color: "black",
-  //     weight:1, 
-  //     fillOpacity:1,
-  //   },
-
-  //   onEachFeature: function(fea
-
-
-  // })
-  
+  // Iterate through each earthquake is its data
   for (let i = 0; i < numEarthquake ; i++) {
 
+    // Determine which color to give earthquake based on earthquake depth
     var color = "";
     if  (earthquakes[i].geometry.coordinates[2] < 10) {
       color = "rgb(163, 246, 0)";
@@ -60,13 +47,15 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
 
 
+    // Show each earthquake point
     var marker = L.circleMarker([earthquakes[i].geometry.coordinates[1], earthquakes[i].geometry.coordinates[0]], {
       color: "black",
       weight: .5,
-      fillColor: color,
+      fillColor: color, // Calcualated from if loop above
       fillOpacity: 1,
       radius: earthquakes[i].properties.mag * 2
-    }).bindPopup("<h2>" + earthquakes[i].properties.place + "</h2> <hr>" + "<h3> Magnitude: " + earthquakes[i].properties.mag + "</h3>" + "<h3> Depth: " + earthquakes[i].geometry.coordinates[2] + "</h3>")
+    })
+    .bindPopup("<h2>" + earthquakes[i].properties.place + "</h2> <hr>" + "<h3> Magnitude: " + earthquakes[i].properties.mag + "</h3>" + "<h3> Depth: " + earthquakes[i].geometry.coordinates[2] + "</h3>")
     .addTo(myMap);
   }
 
@@ -86,20 +75,25 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
              "rgb(163, 246, 0)";
   }
 
+  // Add legend
   legend.onAdd = function () {
 
-    var div = L.DomUtil.create('div', 'info legend'),
-    grades = [-10, 10, 30, 50, 70, 90],
-    labels = [];
+    // Create div for legend
+    var div = L.DomUtil.create('div', 'info legend');
 
-    for (var i = 0; i < grades.length; i++) {
+    // Define our depth ranges
+    var depths = [-10, 10, 30, 50, 70, 90];
+
+    // Iterate through each depth and add the corresponding color and text
+    for (var i = 0; i < depths.length; i++) {
       div.innerHTML +=
-          '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+          '<i style="background:' + getColor(depths[i] + 1) + '"></i> ' + // define color in html
+          depths[i] + (depths[i + 1] ? '&ndash;' + depths[i + 1] + '<br>' : '+'); // define text in html
   }
     return div;
   };
 
+  // Add legend to map
   legend.addTo(myMap);
 
 });
