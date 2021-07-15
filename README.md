@@ -3,6 +3,6 @@ The repository for Homework 17
 
 Files to submitted:
 -----------------------------
-index.html <br>
-static -> js -> logic.js <br>
-static -> css -> style.css <br>
+Leaflet-Step-1 -> index.html <br>
+Leaflet-Step-1 -> static -> js -> logic.js <br>
+Leaflet-Step-1 -> static -> css -> style.css <br>
