@@ -1,5 +1,5 @@
-# Homework17_leaflet-Challenge
-The repository for Homework 17
+# Leaflet
+The repository for Leaflet project
 
 Files to submitted:
 -----------------------------
